@@ -3,7 +3,7 @@ import numpy as np
 import Dataset
 import argparse
 from GNNmodel import GNN_model
-
+ 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset_name', type=str, default='pubfig')
 parser.add_argument('--attr', type=int, default=0)
@@ -12,7 +12,7 @@ args = parser.parse_args()
 img_number = 5
 batch_size = 10
 max_epoch = 1000
-learning_rate = 0.0001  # 0.0001
+learning_rate = 0.0001
 img_size = 227
 
 def run_test(sess, dataset, epoch, img_list, label_list, test_accuracy):
