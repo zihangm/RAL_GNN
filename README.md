@@ -1,5 +1,5 @@
 # RAL_GNN
-An implementation of "Efficient Relative Attribute Learning using Graph Neural Networks"
+An implementation of "[Efficient Relative Attribute Learning using Graph Neural Networks](http://pages.cs.wisc.edu/~zihangm/RAL_GNN.pdf)" by [Zihang Meng](http://pages.cs.wisc.edu/~zihangm/) et al.
 
 ## Get started
 
