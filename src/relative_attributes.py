@@ -96,7 +96,7 @@ def run_GNN():
 	reg_variables = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
 	regularizer = tf.contrib.layers.l2_regularizer(scale=0.01)
 	reg_term = tf.contrib.layers.apply_regularization(regularizer, reg_variables)
-	loss = loss + reg_term
+	#loss = loss + reg_term
 
 	# train step and configuration
 	train_step = tf.train.AdamOptimizer(learning_rate).minimize(loss)
