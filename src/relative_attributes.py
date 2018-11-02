@@ -2,17 +2,18 @@ import tensorflow as tf
 import numpy as np
 import Dataset
 import argparse
+import time
 from GNNmodel import GNN_model
- 
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset_name', type=str, default='pubfig')
 parser.add_argument('--attr', type=int, default=0)
 args = parser.parse_args()
 
 img_number = 5
-batch_size = 10
+batch_size = 40
 max_epoch = 1000
-learning_rate = 0.0001
+learning_rate = 0.0001  # 0.0001
 img_size = 227
 
 def run_test(sess, dataset, epoch, img_list, label_list, test_accuracy):
@@ -26,13 +27,14 @@ def run_test(sess, dataset, epoch, img_list, label_list, test_accuracy):
 		                          label_list[0]: test_batch[1][0], label_list[1]: test_batch[1][1],
 		                          label_list[2]: test_batch[1][2], \
 		                          label_list[4]: test_batch[1][4], label_list[3]: test_batch[1][3]})
-	print "epoch: %d, test_accuracy:%f " %(epoch, accuracy)
+	print("epoch: %d, test_accuracy:%f " %(epoch, accuracy))
 
 
 def run_train(sess, train_step, img_list, label_list, datasetname, attributes_num, loss, test_accuracy):
 	dataset = Dataset.reader(datasetname, attributes_num)
 	epoch = 0
 	step = 0
+	time1 = time.time()
 	run_test(sess, dataset, epoch, img_list, label_list, test_accuracy)
 	while (epoch <= max_epoch):
 		next_batch, epoch_end = dataset.next_batch(batch_size)
@@ -45,15 +47,18 @@ def run_train(sess, train_step, img_list, label_list, datasetname, attributes_nu
 
 		train_step.run(feed_dict= batch_dict)
 
-		if step % 10 == 0:
-			print "epoch: %d, step: %d, loss: %f, train_accuracy:%f" %(epoch, step, sess.run(loss, feed_dict=batch_dict), \
-			                                                           sess.run(test_accuracy, feed_dict=batch_dict))
+		#if step % 10 == 0:
+	#		print("epoch: %d, step: %d, loss: %f, train_accuracy:%f" %(epoch, step, sess.run(loss, feed_dict=batch_dict), \
+	# 		                                                           sess.run(test_accuracy, feed_dict=batch_dict)))
 
 		step += 1
 		if epoch_end == 1:
+			print("time_per_epoch:%f" %(time.time() - time1))
 			run_test(sess, dataset, epoch, img_list, label_list, test_accuracy)
 			epoch = epoch + 1
 			step = 0
+			time1 = time.time()
+
 
 
 def run_GNN():
@@ -96,7 +101,7 @@ def run_GNN():
 	reg_variables = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
 	regularizer = tf.contrib.layers.l2_regularizer(scale=0.01)
 	reg_term = tf.contrib.layers.apply_regularization(regularizer, reg_variables)
-	#loss = loss + reg_term
+#	loss = loss + reg_term
 
 	# train step and configuration
 	train_step = tf.train.AdamOptimizer(learning_rate).minimize(loss)

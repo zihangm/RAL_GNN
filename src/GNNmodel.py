@@ -3,7 +3,7 @@ import tensorflow as tf
 import numpy as np
 
 #load pretrained weight
-net_data = np.load("./pretrain/bvlc_alexnet.npy").item()
+net_data = np.load("./pretrain/bvlc_alexnet.npy",encoding='latin1').item()
 
 regularizer = tf.contrib.layers.l2_regularizer(scale=0.01)
 

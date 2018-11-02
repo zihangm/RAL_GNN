@@ -3,6 +3,9 @@ import os
 import scipy.misc
 import random
 import re
+import matplotlib.pyplot as plt
+import copy
+
 
 OSR_matrix = [
 	{'tallbuilding': 1, 'insidecity': 2, 'street': 2, 'highway': 3, 'coast': 4, 'opencountry': 4, 'mountain': 4,
@@ -122,9 +125,14 @@ class reader:
 
 	def read_img(self):
 		for img_name in os.listdir(self.imgdir):
-			img = scipy.misc.imresize(scipy.misc.imread(self.imgdir + img_name), [256, 256])
-			img = img - np.float32(self.global_mean)
-			img[:, :, 2], img[:, :, 0] = img[:, :, 0], img[:, :, 2]
+			img = np.float32(scipy.misc.imresize(scipy.misc.imread(self.imgdir + img_name), [256, 256]))
+			img[:, :, 0] = img[:, :, 0] - 122.67891434
+			img[:, :, 1] = img[:, :, 1] - 116.66876762
+			img[:, :, 2] = img[:, :, 2] - 104.00698793
+			tmp0 = copy.deepcopy(img[:,:,0])
+			tmp2 = copy.deepcopy(img[:,:,2])
+			img[:,:,0] = tmp2
+			img[:,:,2] = tmp0
 			img_tag = img_name.split('_')[0]
 			self.dataset.append([img, img_tag])
 		random.shuffle(self.dataset)
